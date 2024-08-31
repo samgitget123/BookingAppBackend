@@ -36,6 +36,16 @@ router.post('/book-slot', async (req, res) => {
          return res.status(404).json({ message: 'Ground not found' });
      }
  
+     // Check if any of the requested slots are already booked
+     const alreadyBookedSlots = ground.slots.booked.filter(slot => slots.includes(slot));
+
+     if (alreadyBookedSlots.length > 0) {
+         return res.status(400).json({
+             message: 'Requested slots have already been booked',
+             bookedSlots: alreadyBookedSlots,
+         });
+     }
+
      // Update the booked slots
      const updatedBookedSlots = [...new Set([...ground.slots.booked, ...slots])]; // Ensure uniqueness
      console.log('Updated booked slots:', updatedBookedSlots);
