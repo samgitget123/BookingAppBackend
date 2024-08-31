@@ -5,14 +5,20 @@ const Ground = require('../models/Ground');
 const {generateBookingID} = require('../Utils');
 
 router.post('/book-slot', async (req, res) => {
-    const { ground_id, date, slots } = req.body;
+    const { ground_id, date, slots , comboPack  } = req.body;
     try {
       // Calculate the price based on the number of slots booked
       const pricePerHour = 800; 
       const slotDurationInHours = 0.5;
       const pricePerSlot = pricePerHour * slotDurationInHours;
-      const totalPrice = slots.length * pricePerSlot;
+      const totalPriceForSlots = slots.length * pricePerSlot;
         
+      // Combo pack price
+    const comboPackPrice = comboPack ? 80 : 0; // If comboPack is true, add 80 INR
+
+    // Total price calculation
+    const totalPrice = totalPriceForSlots + comboPackPrice;
+
       // Generate a unique booking ID
       const booking_id = generateBookingID();
   
@@ -21,6 +27,7 @@ router.post('/book-slot', async (req, res) => {
         ground_id,
         date,
         slots,
+        comboPack, 
         book: {
           booking_id,
           price: totalPrice,
@@ -60,6 +67,7 @@ router.post('/book-slot', async (req, res) => {
         ground_id,
         date,
         slots,
+        comboPack,
         book: {
           booking_id,
           price: totalPrice,

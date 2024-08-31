@@ -13,6 +13,10 @@ const bookingSchema = new mongoose.Schema({
     type: [String], 
     required: true,
   },
+  comboPack: {
+    type: Boolean, // Indicates if the user selected the combo pack
+    default: false,
+  },
   book: {
     booking_id: {
       type: String,
